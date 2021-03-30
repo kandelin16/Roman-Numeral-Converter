@@ -1,0 +1,201 @@
+<!--
+    Roman Numeral Converter
+    OIT Computer Programmer Application
+    Author: Kyle Andelin
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numeral Converter</title>
+</head>
+<body>
+    <!--Set up form. Different fields will appear dynamically based on-->
+    <label for="check">Would you like to convert from Roman Numerals to Numbers or vice versa?</label><br><br>
+    <input type="radio" id="roman" name="radio" onclick="romanReveal();">
+    <label for="male">Roman to Numbers</label><br>
+    <input type="radio" id="int" name="radio" onclick="letterReveal();">
+    <label for="female">Numbers to Roman</label><br>
+
+    <fieldset id="romanfield" style="width: 0px;" hidden>
+        <label for="numerals">Roman Numerals to Convert:</label> <br>
+        <input type="text" id="numerals" onkeyup="capitalize();">
+    </fieldset>
+
+    <fieldset id="numberfield" style="width: 0px;" hidden>
+        <label for="numbers">Numbers to Convert:</label> <br>
+        <input type="text" id="numbers">
+    </fieldset>
+
+    <br><br>
+    <button type="button" onclick="convert();">Convert</button>
+    <br><br>
+    <h3 id="output"></h3>
+    
+    <script>
+        //This function reveals the roman numeral fieldset if roman numeral is chosen.
+        function romanReveal()
+        {
+            document.getElementById("romanfield").hidden = false;
+            document.getElementById("numberfield").hidden = true;
+        }
+
+        //This function reveals the numer fieldset if the number option is chosen.
+        function letterReveal()
+        {
+            document.getElementById("numberfield").hidden = false;
+            document.getElementById("romanfield").hidden = true;
+        }
+
+        //This function capitalizes the roman numerals as they are typed in.
+        function capitalize()
+        {
+            document.getElementById("numerals").value = document.getElementById("numerals").value.toUpperCase();
+        }
+        //The convert function takes the input from the user and processes it, outputting the converted value.
+        function convert()
+        {
+            let converted_list = [];
+            let total = 0;
+            let total_num = '';
+
+            //Check if converting from numerals to numbers.
+            if (document.getElementById("numberfield").hidden)
+            {
+                //Parse numerals and assign number values for each one.
+                let numerals = document.getElementById("numerals").value.match(/.{1}/g);
+                for (iCount = 0; iCount < numerals.length; iCount++)
+                {
+                    if (numerals[iCount] == "I")
+                    {
+                        converted_list.push(1);
+                    }
+                    else if (numerals[iCount] == "V")
+                    {
+                        converted_list.push(5);
+                    }
+                    else if (numerals[iCount] == "X")
+                    {
+                        converted_list.push(10);
+                    }
+                    else if (numerals[iCount] == "L")
+                    {
+                        converted_list.push(50);
+                    }
+                    else if (numerals[iCount] == "C")
+                    {
+                        converted_list.push(100);
+                    }
+                    else if (numerals[iCount] == "D")
+                    {
+                        converted_list.push(500);
+                    }
+                    else if (numerals[iCount] == "M")
+                    {
+                        converted_list.push(1000);
+                    }
+                    
+                }
+                //Calculate total, accounting for subtraction for smaller first characters
+                for (let iCount = 0; iCount < converted_list.length; iCount++)
+                {
+                    if (converted_list[iCount] < converted_list[iCount+1])
+                    {
+                        total = total - converted_list[iCount];
+                    }
+                    else
+                    {
+                        total = total + converted_list[iCount];
+                    }
+                }
+                //Output to h3 tag
+                document.getElementById("output").innerHTML = total;
+            }
+            //Convert numbers to characters
+            else
+            {
+                let number = document.getElementById("numbers").value;
+                //Gradually reduces number by conditionally subtracting numbers corresponding to characters
+                do 
+                {
+                    if (number >= 1000)
+                    {
+                        converted_list.push("M");
+                        number = number -1000;
+                    }
+                    else if (number >= 900)
+                    {
+                        converted_list.push("CM");
+                        number = number - 900;
+                    }
+                    else if (number >= 500)
+                    {
+                        converted_list.push("D")
+                        number = number -500;
+                    }
+                    else if (number >= 450)
+                    {
+                        converted_list.push("LD")
+                        number = number - 450
+                    }
+                    else if (number >= 100)
+                    {
+                        converted_list.push("C")
+                        number = number - 100;
+                    }
+                    else if (number >= 90)
+                    {
+                        converted_list.push("XC")
+                        number = number - 90;
+                    }
+                    else if (number >= 50)
+                    {
+                        converted_list.push("L")
+                        number = number - 50;
+                    }
+                    else if (number >= 40)
+                    {
+                        converted_list.push("XL")
+                        number = number - 40;
+                    }
+                    else if (number >= 10)
+                    {
+                        converted_list.push("X")
+                        number = number - 10;
+                    }
+                    else if (number >= 9)
+                    {
+                        converted_list.push("IX")
+                        number = number - 9;
+                    }
+                    else if (number >= 5)
+                    {
+                        converted_list.push("V")
+                        number = number -5
+                    }
+                    else if (number >= 4)
+                    {
+                        converted_list.push("IV")
+                        number = number - 4;
+                    }
+                    else
+                    {
+                        converted_list.push("I")
+                        number = number - 1
+                    }
+                }while (number > 0)
+
+                //Compile output and display to h3 tag
+                for (let iCount = 0; iCount < converted_list.length; iCount++)
+                {
+                    total_num += converted_list[iCount];
+                }
+                document.getElementById("output").innerHTML = total_num;
+            }
+        }
+        
+    </script>
+</body>
+</html>
